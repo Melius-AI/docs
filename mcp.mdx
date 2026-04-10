@@ -1,0 +1,166 @@
+---
+title: MCP server
+description: Connect an AI agent to your Melius projects, canvases, and creatives.
+---
+
+## Overview
+
+### What is an MCP server?
+
+You can think of an MCP (Model Context Protocol) server as an authenticated API that an AI agent can use to talk directly to a platform or application. In Melius, that means you can use an agent to read and write to your projects, canvases, and creatives — generating images and videos and downloading outputs without ever leaving your AI tool.
+
+---
+
+## Getting started
+
+### Connect to Claude Desktop
+
+<Steps>
+  <Step title="Open Claude">
+    Go to **Customize → Connectors → Add (+) → Custom**.
+  </Step>
+  <Step title="Name your connector">
+    Set the name to **Melius**.
+  </Step>
+  <Step title="Paste this URL">
+    ```
+    https://api.melius.com/mcp
+    ```
+  </Step>
+  <Step title="Generate an API key">
+    In Melius, go to your **team space settings** and generate a new API key with no expiry. Name it something like `Claude`.
+  </Step>
+  <Step title="Paste your API key">
+    Copy the key and paste it into the Claude connection modal. Save the connection.
+  </Step>
+  <Step title="Set tool permissions">
+    Go to **Tool Permissions** and select **Always Allow** for everything.
+  </Step>
+</Steps>
+
+---
+
+### Connect to Claude Code
+
+<Steps>
+  <Step title="Run this command">
+    In your terminal:
+
+    ```bash
+    claude mcp add melius --transport http https://api.melius.com/mcp --scope user
+    ```
+  </Step>
+  <Step title="Open Claude Code">
+    Run `claude` to open the interactive session.
+  </Step>
+  <Step title="Open the MCP menu">
+    Type `/mcp` and press **Enter**.
+  </Step>
+  <Step title="Authenticate">
+    Use the arrow keys to select **melius**, then follow the prompt to authenticate with your API key in the browser.
+  </Step>
+</Steps>
+
+---
+
+### Verifying the connection
+
+To verify the connection works, open a new chat and send:
+
+> "Create a new project called Hello World in Melius"
+
+---
+
+### Uploading images to Melius via MCP
+
+To allow the agent to upload images to Melius, you need to enable network egress in your Claude organization settings.
+
+<Steps>
+  <Step title="Open organization settings">
+    Go to **Organization Settings → Capabilities → Code execution**.
+  </Step>
+  <Step title="Enable the required settings">
+    Turn on both:
+    - **Cloud code execution and file creation**
+    - **Allow network egress**
+  </Step>
+  <Step title="Add Melius to the allowlist">
+    In the network egress allowlist, add:
+
+    ```
+    *.melius.com
+    ```
+    
+    This allows your images to be uploaded to Melius servers.
+  </Step>
+</Steps>
+
+---
+
+## Reference
+
+### Tools and capabilities
+
+The Melius MCP server exposes the following tools. The agent picks the right ones based on your prompt — you won't need to call them directly.
+
+**Projects**
+- `project_list` — List projects in your team.
+- `project_get` — Get a project by ID.
+- `project_create` — Create a new project with an empty canvas.
+
+**Canvases**
+- `canvas_list` — List canvases in a project.
+- `canvas_get` — Get canvas metadata.
+- `canvas_content` — Get all nodes and edges on a canvas.
+- `canvas_create` — Create a new canvas.
+- `canvas_delete` — Delete a canvas and everything on it.
+- `canvas_plan_layout` — Compute positions for new nodes that avoid overlapping existing content.
+
+**Nodes**
+- `node_create` — Create a node (text, image, video, file, or group).
+- `node_get` — Get a node's details and generated assets.
+- `node_update` — Update a node's prompt, model, or settings.
+- `node_delete` — Delete a node.
+- `node_set_text` — Set the literal text content of a custom_text node.
+- `node_set_version` — Select a specific generation version on a node.
+- `node_group` — Group a set of nodes into a container.
+- `bulk_create_nodes` — Create multiple nodes — and optionally edges — in one call.
+
+**Edges**
+- `edge_create` — Connect two nodes with an edge.
+- `edge_delete` — Remove an edge.
+- `bulk_create_edges` — Create multiple edges in one call.
+
+**Runs**
+- `run_start` — Start an AI generation on a single node.
+- `run_get` — Get the status and result of a run.
+- `run_latest` — Get the most recent run for every node on a canvas.
+- `run_download` — Download outputs from a single run.
+- `bulk_run_start` — Start runs on multiple nodes at once.
+- `bulk_run_get` — Get the status of a bulk run.
+- `bulk_run_wait` — Wait for a bulk run to finish.
+- `bulk_run_download` — Download outputs from a bulk run.
+- `creative_download` — Download all creatives from a canvas as a ZIP.
+
+**Files**
+- `file_upload` — Upload a local image and attach it to a file node.
+- `file_upload_complete` — Finalize an upload after the curl step.
+
+**Models**
+- `model_list` — List available AI models, variants, and supported settings.
+- `model_defaults` — See which models are used when none is specified.
+
+**Comments**
+- `comment_list` — List comments on a canvas.
+- `comment_create` — Create a comment thread at a position on the canvas.
+- `comment_reply` — Reply to an existing comment.
+- `comment_resolve` — Mark a comment as resolved.
+
+**Presets**
+- `preset_list` — Discover pre-built workflow templates.
+- `preset_apply` — Apply a preset to a canvas.
+
+**Utilities**
+- `display_canvas` — Show an interactive preview of the current canvas state.
+- `get_guide` — Load a domain-specific guide (e.g. `cinema`, `ugc-ads`, `product-photo`).
+- `team_list` — List teams your API key has access to.
