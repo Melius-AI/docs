@@ -7,7 +7,7 @@
     "light": "#ffffff",
     "dark": "#000000"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/melRectangle.svg",
   "navigation": {
     "tabs": [
       {
