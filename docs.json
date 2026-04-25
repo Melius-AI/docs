@@ -22,8 +22,9 @@
     ]
   },
   "logo": {
-    "light": "/images/Rectangle 5252.png",
-    "dark": "/images/Rectangle 5252.png"
+    "light": "/logo/melius-logo.svg",
+    "dark": "/logo/melius-logo.svg",
+    "href": "https://melius.com"
   },
   "navbar": {
     "links": [
